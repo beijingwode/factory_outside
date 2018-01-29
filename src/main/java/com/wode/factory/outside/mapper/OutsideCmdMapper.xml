@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+"http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.wode.factory.outside.mapper.OutsideCmdDao">
+  
+    <resultMap id="OutsideCmd" type="com.wode.factory.outside.model.OutsideCmd">    
+        <result property="id" column="id"/>
+        <result property="execDate" column="exec_date"/>
+        <result property="execStatus" column="exec_status"/>
+        <result property="execResult" column="exec_result"/>
+        <result property="errMsg" column="err_msg"/>
+        <result property="serviceName" column="service_name"/>
+        <result property="methodName" column="method_name"/>
+        <result property="notifyUrl" column="notify_url"/>
+        <result property="paramJson" column="param_json"/>
+        <result property="beanClass" column="bean_class"/>
+        <result property="comeForm" column="come_form"/>
+        <result property="createTime" column="create_time"/>
+        <result property="speedType" column="speed_type"/>
+    </resultMap>
+
+    <!-- 用于select查询公用抽取的列 -->
+    <sql id="columns">
+        <![CDATA[
+        id,exec_date,exec_status,exec_result,err_msg,service_name,method_name,notify_url,param_json,bean_class,come_form,create_time,speed_type
+        ]]>
+    </sql>
+
+    <!-- useGeneratedKeys="true" keyProperty="xxx" for sqlserver and mysql -->
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+    <![CDATA[
+        INSERT INTO t_outside_cmd (
+            id ,
+            exec_date ,
+            exec_status ,
+            exec_result ,
+            err_msg ,
+            service_name ,
+            method_name ,
+            notify_url ,
+            param_json ,
+            bean_class ,
+            come_form ,
+            create_time ,
+            speed_type
+        ) VALUES (
+            #{id} ,
+            #{execDate} ,
+            #{execStatus} ,
+            #{execResult} ,
+            #{errMsg} ,
+            #{serviceName} ,
+            #{methodName} ,
+            #{notifyUrl} ,
+            #{paramJson} ,
+            #{beanClass} ,
+            #{comeForm} ,
+            #{createTime} ,
+            #{speedType}
+        )
+    ]]>
+    </insert>
+
+    <update id="update" >
+    <![CDATA[
+        UPDATE t_outside_cmd SET            
+            exec_date = #{execDate} ,
+            exec_status = #{execStatus} ,
+            exec_result = #{execResult} ,
+            err_msg = #{errMsg} ,
+            service_name = #{serviceName} ,
+            method_name = #{methodName} ,
+            notify_url = #{notifyUrl} ,
+            param_json = #{paramJson} ,
+            bean_class = #{beanClass} ,
+            come_form = #{comeForm} ,
+            create_time = #{createTime} ,
+            speed_type = #{speedType} 
+        WHERE 
+            id = #{id} 
+    ]]>
+    </update>
+
+    <delete id="delete">
+    <![CDATA[
+        DELETE FROM t_outside_cmd WHERE
+        id = #{id} 
+    ]]>
+    </delete>
+    <select id="getById" resultMap="OutsideCmd">
+        SELECT <include refid="columns" />
+        <![CDATA[
+            FROM t_outside_cmd 
+            WHERE 
+                id = #{id} 
+        ]]>
+    </select>
+
+    <select id="selectByModel" resultMap="OutsideCmd">
+        SELECT <include refid="columns" /> FROM t_outside_cmd 
+        <include refid="find_where"/>
+    </select>
+
+    <select id="select10Exec" resultMap="OutsideCmd">
+        SELECT <include refid="columns" /> FROM t_outside_cmd 
+        <include refid="find_where"/>
+        ORDER BY create_time
+        LIMIT 10
+    </select>
+    
+    <sql id="find_where">
+        <!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用rapid中的Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+        <where>
+           <if test="@Ognl@isNotEmpty(id)">
+                AND id = #{id}
+            </if>
+           <if test="@Ognl@isNotEmpty(execDate)">
+                AND exec_date = #{execDate}
+            </if>
+           <if test="@Ognl@isNotEmpty(execStatus)">
+                AND exec_status = #{execStatus}
+            </if>
+           <if test="@Ognl@isNotEmpty(execResult)">
+                AND exec_result = #{execResult}
+            </if>
+           <if test="@Ognl@isNotEmpty(errMsg)">
+                AND err_msg = #{errMsg}
+            </if>
+           <if test="@Ognl@isNotEmpty(serviceName)">
+                AND service_name = #{serviceName}
+            </if>
+           <if test="@Ognl@isNotEmpty(methodName)">
+                AND method_name = #{methodName}
+            </if>
+           <if test="@Ognl@isNotEmpty(notifyUrl)">
+                AND notify_url = #{notifyUrl}
+            </if>
+           <if test="@Ognl@isNotEmpty(paramJson)">
+                AND param_json = #{paramJson}
+            </if>
+           <if test="@Ognl@isNotEmpty(beanClass)">
+                AND bean_class = #{beanClass}
+            </if>
+           <if test="@Ognl@isNotEmpty(comeForm)">
+                AND come_form = #{comeForm}
+            </if>
+           <if test="@Ognl@isNotEmpty(createTime)">
+                AND create_time = #{createTime}
+            </if>
+           <if test="@Ognl@isNotEmpty(speedType)">
+                AND speed_type = #{speedType}
+            </if>
+        </where>
+    </sql>
+</mapper>
+
+
+
